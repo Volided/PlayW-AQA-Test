@@ -1,4 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+function loadEnvConfig(env: string){
+  dotenv.config({ path: path.resolve(__dirname, `.env.${env}`), override: true });
+}
+const env = process.env.NODE_ENV || 'dev';
+loadEnvConfig(env)
+
 
 /**
  * Read environment variables from file.
@@ -35,18 +44,30 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'dev',
+      testMatch: '**/*.spec.ts',
+      use: {
+         baseURL: process.env.BASE_URL,    
+         screenshot:'only-on-failure',
+        ...devices['Desktop Chrome'] },
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: 'stage',
+      testMatch: '**/*.spec.ts',
+      use: {
+         baseURL: process.env.BASE_URL,    
+         screenshot:'only-on-failure',
+        ...devices['Desktop Chrome'] },
     },
 
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: 'prod',
+      testMatch: '**/*.spec.ts',
+      use: {
+         baseURL: process.env.BASE_URL,    
+         screenshot:'only-on-failure',
+        ...devices['Desktop Chrome'] },
     },
 
     /* Test against mobile viewports. */
