@@ -1,5 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
+
+
+function loadEnvConfig(env: string){
+  dotenv.config({ path: path.resolve(__dirname, `.env.${env}`), override: true });
+}
+const env = process.env.NODE_ENV || 'development';
+loadEnvConfig(env)
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -36,7 +45,13 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Chrome'] },
+      testMatch: '**/*.spec.ts',
+      use: { 
+        baseURL: process.env.BASE_URL,    
+        screenshot:'only-on-failure',
+        video:'on',
+        headless: process.env.HEADLESS === 'true',  
+        ...devices['Chrome'] },
     },
 
     {
