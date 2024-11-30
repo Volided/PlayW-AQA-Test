@@ -11,6 +11,7 @@ dotenv.config();
     const page = await  context.newPage();
     await page.goto(process.env.BASE_URL!);
 
+    await page.getByRole('button', { name: 'Sign In' }).click();
     await page.fill('#signinEmail', process.env.USER_EMAIL!);
     await page.fill('#signinPassword', process.env.USER_PASS!);
     await page.getByRole('button', { name: 'Login' }).click();
